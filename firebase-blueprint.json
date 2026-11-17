@@ -1,0 +1,373 @@
+{
+  "entities": {
+    "UserProfile": {
+      "title": "UserProfile",
+      "description": "Public-safe gaming profile and rank status for an FFZONEX user.",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "displayName": { "type": "string", "minLength": 1, "maxLength": 80 },
+        "photoURL": { "type": "string", "maxLength": 1000 },
+        "vipTier": { "type": "string", "enum": ["Bronze", "Silver", "Gold", "Diamond", "Grandmaster"] },
+        "rankPoints": { "type": "number" },
+        "referralCode": { "type": "string", "minLength": 4, "maxLength": 24, "pattern": "^[A-Z0-9_\\-]+$" },
+        "referredBy": { "type": "string", "maxLength": 128 },
+        "referralCount": { "type": "number" },
+        "totalOrders": { "type": "number" },
+        "completedOrders": { "type": "number" },
+        "lastDailyClaimAt": { "type": "string", "maxLength": 64 },
+        "dailyStreak": { "type": "number" },
+        "isBlocked": { "type": "boolean" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["uid", "displayName", "vipTier", "rankPoints", "referralCode", "referralCount", "totalOrders", "completedOrders", "dailyStreak", "isBlocked", "createdAt", "updatedAt"]
+    },
+    "UserPrivateInfo": {
+      "title": "UserPrivateInfo",
+      "description": "PII-isolated private contact and saved Free Fire UID details.",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "email": { "type": "string", "format": "email", "maxLength": 160 },
+        "phone": { "type": "string", "maxLength": 32 },
+        "savedPlayerUid": { "type": "string", "maxLength": 24 },
+        "savedServer": { "type": "string", "maxLength": 40 },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["uid", "email", "updatedAt"]
+    },
+    "Category": {
+      "title": "Category",
+      "description": "Product catalog category.",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string", "minLength": 2, "maxLength": 60 },
+        "slug": { "type": "string", "minLength": 2, "maxLength": 60, "pattern": "^[a-z0-9_\\-]+$" },
+        "description": { "type": "string", "maxLength": 240 },
+        "sortOrder": { "type": "number" },
+        "active": { "type": "boolean" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["name", "slug", "sortOrder", "active", "updatedAt"]
+    },
+    "Product": {
+      "title": "Product",
+      "description": "Free Fire diamond package, membership, or level up pass.",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string", "minLength": 2, "maxLength": 100 },
+        "category": { "type": "string", "minLength": 2, "maxLength": 60 },
+        "diamonds": { "type": "number" },
+        "priceBdt": { "type": "number" },
+        "discountPercent": { "type": "number" },
+        "salePriceBdt": { "type": "number" },
+        "imageUrl": { "type": "string", "minLength": 1, "maxLength": 1000 },
+        "description": { "type": "string", "maxLength": 400 },
+        "badgeText": { "type": "string", "maxLength": 40 },
+        "available": { "type": "boolean" },
+        "featured": { "type": "boolean" },
+        "sortOrder": { "type": "number" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["name", "category", "diamonds", "priceBdt", "discountPercent", "salePriceBdt", "imageUrl", "available", "featured", "sortOrder", "createdAt", "updatedAt"]
+    },
+    "Order": {
+      "title": "Order",
+      "description": "Server-verified Free Fire top-up order.",
+      "type": "object",
+      "properties": {
+        "orderCode": { "type": "string", "minLength": 6, "maxLength": 32, "pattern": "^[A-Z0-9\\-]+$" },
+        "userId": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "userDisplayName": { "type": "string", "maxLength": 80 },
+        "playerUid": { "type": "string", "minLength": 5, "maxLength": 20, "pattern": "^[0-9]+$" },
+        "serverRegion": { "type": "string", "enum": ["Bangladesh", "Singapore", "Indonesia", "India", "Europe", "MENA"] },
+        "productId": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "productName": { "type": "string", "minLength": 1, "maxLength": 100 },
+        "diamonds": { "type": "number" },
+        "basePrice": { "type": "number" },
+        "discountAmount": { "type": "number" },
+        "couponCode": { "type": "string", "maxLength": 32 },
+        "couponDiscount": { "type": "number" },
+        "finalPrice": { "type": "number" },
+        "paymentMethod": { "type": "string", "enum": ["wallet", "bKash", "Nagad", "Rocket"] },
+        "paymentTrxId": { "type": "string", "maxLength": 64 },
+        "status": { "type": "string", "enum": ["pending", "processing", "completed", "cancelled", "refunded"] },
+        "adminNote": { "type": "string", "maxLength": 300 },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["orderCode", "userId", "playerUid", "serverRegion", "productId", "productName", "diamonds", "basePrice", "discountAmount", "couponCode", "couponDiscount", "finalPrice", "paymentMethod", "status", "createdAt", "updatedAt"]
+    },
+    "Wallet": {
+      "title": "Wallet",
+      "description": "Protected user wallet balance and reward points.",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "balance": { "type": "number" },
+        "rewardPoints": { "type": "number" },
+        "totalDeposited": { "type": "number" },
+        "totalSpent": { "type": "number" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "balance", "rewardPoints", "totalDeposited", "totalSpent", "updatedAt"]
+    },
+    "Deposit": {
+      "title": "Deposit",
+      "description": "Manual wallet deposit request awaiting admin verification.",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "userDisplayName": { "type": "string", "maxLength": 80 },
+        "method": { "type": "string", "enum": ["bKash", "Nagad", "Rocket"] },
+        "amount": { "type": "number" },
+        "senderNumber": { "type": "string", "minLength": 8, "maxLength": 20 },
+        "trxId": { "type": "string", "minLength": 5, "maxLength": 48, "pattern": "^[A-Za-z0-9_\\-]+$" },
+        "screenshotDataUrl": { "type": "string", "maxLength": 400000 },
+        "status": { "type": "string", "enum": ["pending", "approved", "rejected"] },
+        "adminNote": { "type": "string", "maxLength": 300 },
+        "reviewedBy": { "type": "string", "maxLength": 128 },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "method", "amount", "senderNumber", "trxId", "status", "createdAt", "updatedAt"]
+    },
+    "UsedTrxId": {
+      "title": "UsedTrxId",
+      "description": "Idempotency lock preventing duplicate deposit transaction IDs.",
+      "type": "object",
+      "properties": {
+        "trxId": { "type": "string", "minLength": 5, "maxLength": 48, "pattern": "^[A-Za-z0-9_\\-]+$" },
+        "depositId": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "userId": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["trxId", "depositId", "userId", "createdAt"]
+    },
+    "Transaction": {
+      "title": "Transaction",
+      "description": "Immutable wallet ledger entry.",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "type": { "type": "string", "enum": ["deposit", "purchase", "refund", "reward", "referral"] },
+        "amount": { "type": "number" },
+        "balanceAfter": { "type": "number" },
+        "referenceId": { "type": "string", "maxLength": 128 },
+        "description": { "type": "string", "minLength": 1, "maxLength": 200 },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "type", "amount", "balanceAfter", "referenceId", "description", "createdAt"]
+    },
+    "Coupon": {
+      "title": "Coupon",
+      "description": "Promotional discount coupon.",
+      "type": "object",
+      "properties": {
+        "code": { "type": "string", "minLength": 3, "maxLength": 32, "pattern": "^[A-Z0-9_\\-]+$" },
+        "discountType": { "type": "string", "enum": ["percent", "fixed"] },
+        "discountValue": { "type": "number" },
+        "minOrderAmount": { "type": "number" },
+        "maxDiscount": { "type": "number" },
+        "active": { "type": "boolean" },
+        "usageCount": { "type": "number" },
+        "usageLimit": { "type": "number" },
+        "expiresAt": { "type": "string", "maxLength": 64 },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["code", "discountType", "discountValue", "minOrderAmount", "maxDiscount", "active", "usageCount", "usageLimit", "createdAt"]
+    },
+    "Referral": {
+      "title": "Referral",
+      "description": "Referral attribution record.",
+      "type": "object",
+      "properties": {
+        "referrerId": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "referrerCode": { "type": "string", "minLength": 4, "maxLength": 24 },
+        "referredUserId": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "referredDisplayName": { "type": "string", "maxLength": 80 },
+        "bonusPoints": { "type": "number" },
+        "status": { "type": "string", "enum": ["pending", "credited"] },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["referrerId", "referrerCode", "referredUserId", "referredDisplayName", "bonusPoints", "status", "createdAt"]
+    },
+    "Notification": {
+      "title": "Notification",
+      "description": "User notification entry.",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "title": { "type": "string", "minLength": 1, "maxLength": 100 },
+        "message": { "type": "string", "minLength": 1, "maxLength": 300 },
+        "category": { "type": "string", "enum": ["order", "wallet", "reward", "promo", "support"] },
+        "read": { "type": "boolean" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "title", "message", "category", "read", "createdAt"]
+    },
+    "SupportTicket": {
+      "title": "SupportTicket",
+      "description": "Customer support ticket and message thread.",
+      "type": "object",
+      "properties": {
+        "ticketCode": { "type": "string", "minLength": 5, "maxLength": 32, "pattern": "^[A-Z0-9\\-]+$" },
+        "userId": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "userDisplayName": { "type": "string", "maxLength": 80 },
+        "subject": { "type": "string", "minLength": 3, "maxLength": 120 },
+        "category": { "type": "string", "enum": ["Order Issue", "Deposit Verification", "Account & VIP", "General Inquiry"] },
+        "orderCode": { "type": "string", "maxLength": 32 },
+        "message": { "type": "string", "minLength": 5, "maxLength": 1500 },
+        "status": { "type": "string", "enum": ["open", "in_progress", "resolved", "closed"] },
+        "replies": { "type": "array" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["ticketCode", "userId", "subject", "category", "message", "status", "replies", "createdAt", "updatedAt"]
+    },
+    "AdminUser": {
+      "title": "AdminUser",
+      "description": "Role-based admin authorization record.",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "email": { "type": "string", "format": "email", "maxLength": 160 },
+        "role": { "type": "string", "enum": ["super_admin", "manager", "moderator"] },
+        "displayName": { "type": "string", "maxLength": 80 },
+        "addedBy": { "type": "string", "maxLength": 128 },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["uid", "email", "role", "displayName", "addedBy", "createdAt"]
+    },
+    "AuditLog": {
+      "title": "AuditLog",
+      "description": "Immutable administrative security audit trail.",
+      "type": "object",
+      "properties": {
+        "actorId": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "actorEmail": { "type": "string", "maxLength": 160 },
+        "action": { "type": "string", "minLength": 2, "maxLength": 100 },
+        "targetCollection": { "type": "string", "minLength": 1, "maxLength": 60 },
+        "targetId": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "details": { "type": "string", "maxLength": 400 },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["actorId", "action", "targetCollection", "targetId", "details", "createdAt"]
+    },
+    "StoreSettings": {
+      "title": "StoreSettings",
+      "description": "Storefront configuration, payment numbers, banners, and FAQs.",
+      "type": "object",
+      "properties": {
+        "brandName": { "type": "string", "maxLength": 60 },
+        "tagline": { "type": "string", "maxLength": 120 },
+        "logoUrl": { "type": "string", "maxLength": 1000 },
+        "heroBannerUrl": { "type": "string", "maxLength": 1000 },
+        "announcement": { "type": "string", "maxLength": 240 },
+        "maintenanceMode": { "type": "boolean" },
+        "flashSaleActive": { "type": "boolean" },
+        "flashSaleTitle": { "type": "string", "maxLength": 120 },
+        "flashSaleEndsAt": { "type": "string", "maxLength": 64 },
+        "bKashNumber": { "type": "string", "maxLength": 32 },
+        "nagadNumber": { "type": "string", "maxLength": 32 },
+        "rocketNumber": { "type": "string", "maxLength": 32 },
+        "contactEmail": { "type": "string", "maxLength": 160 },
+        "contactPhone": { "type": "string", "maxLength": 32 },
+        "whatsappUrl": { "type": "string", "maxLength": 300 },
+        "discordUrl": { "type": "string", "maxLength": 300 },
+        "telegramUrl": { "type": "string", "maxLength": 300 },
+        "facebookUrl": { "type": "string", "maxLength": 300 },
+        "faqs": { "type": "array" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["brandName", "tagline", "logoUrl", "heroBannerUrl", "maintenanceMode", "flashSaleActive", "bKashNumber", "nagadNumber", "rocketNumber", "faqs", "updatedAt"]
+    },
+    "LeaderboardEntry": {
+      "title": "LeaderboardEntry",
+      "description": "PII-free public referral and VIP rank leaderboard record.",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "displayName": { "type": "string", "minLength": 1, "maxLength": 80 },
+        "vipTier": { "type": "string", "enum": ["Bronze", "Silver", "Gold", "Diamond", "Grandmaster"] },
+        "rankPoints": { "type": "number" },
+        "referralCode": { "type": "string", "minLength": 4, "maxLength": 24 },
+        "referralCount": { "type": "number" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["uid", "displayName", "vipTier", "rankPoints", "referralCode", "referralCount", "updatedAt"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": { "$ref": "#/entities/UserProfile" },
+      "description": "User gaming profiles and VIP progression."
+    },
+    "/users/{userId}/private/{docId}": {
+      "schema": { "$ref": "#/entities/UserPrivateInfo" },
+      "description": "PII-isolated private contact info and saved player UID."
+    },
+    "/leaderboard/{userId}": {
+      "schema": { "$ref": "#/entities/LeaderboardEntry" },
+      "description": "PII-free referral leaderboard and referral code lookup."
+    },
+    "/categories/{categoryId}": {
+      "schema": { "$ref": "#/entities/Category" },
+      "description": "Product catalog categories."
+    },
+    "/products/{productId}": {
+      "schema": { "$ref": "#/entities/Product" },
+      "description": "Free Fire top-up packages and memberships."
+    },
+    "/orders/{orderId}": {
+      "schema": { "$ref": "#/entities/Order" },
+      "description": "Player top-up orders with live status tracking."
+    },
+    "/wallets/{userId}": {
+      "schema": { "$ref": "#/entities/Wallet" },
+      "description": "User wallet balances and reward points."
+    },
+    "/deposits/{depositId}": {
+      "schema": { "$ref": "#/entities/Deposit" },
+      "description": "Manual deposit requests via bKash, Nagad, and Rocket."
+    },
+    "/usedTrxIds/{trxId}": {
+      "schema": { "$ref": "#/entities/UsedTrxId" },
+      "description": "Transaction ID idempotency lock preventing duplicate deposits."
+    },
+    "/transactions/{transactionId}": {
+      "schema": { "$ref": "#/entities/Transaction" },
+      "description": "Immutable wallet transaction ledger."
+    },
+    "/coupons/{couponCode}": {
+      "schema": { "$ref": "#/entities/Coupon" },
+      "description": "Promotional discount codes."
+    },
+    "/referrals/{referralId}": {
+      "schema": { "$ref": "#/entities/Referral" },
+      "description": "User referral tracking and bonus credits."
+    },
+    "/notifications/{notificationId}": {
+      "schema": { "$ref": "#/entities/Notification" },
+      "description": "User notification inbox."
+    },
+    "/supportTickets/{ticketId}": {
+      "schema": { "$ref": "#/entities/SupportTicket" },
+      "description": "Customer support tickets and replies."
+    },
+    "/adminUsers/{userId}": {
+      "schema": { "$ref": "#/entities/AdminUser" },
+      "description": "Protected admin role assignments."
+    },
+    "/auditLogs/{logId}": {
+      "schema": { "$ref": "#/entities/AuditLog" },
+      "description": "Immutable administrative audit logs."
+    },
+    "/settings/{settingId}": {
+      "schema": { "$ref": "#/entities/StoreSettings" },
+      "description": "Storefront configuration, payment numbers, and FAQs."
+    }
+  }
+}

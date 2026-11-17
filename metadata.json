@@ -1,0 +1,8 @@
+{
+  "name": "FFZONEX",
+  "description": "FFZONEX — Premium Free Fire Diamond Top-Up Marketplace, Wallet & Live Order Tracking Platform.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
